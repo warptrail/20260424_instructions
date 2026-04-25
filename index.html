@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Family Photo & Genealogy Project Pipeline</title>
+  <style>
+    :root {
+      --bg: #090b10;
+      --panel: #111622;
+      --panel-2: #151d2c;
+      --text: #edf3ff;
+      --muted: #aeb9cc;
+      --line: #29364b;
+      --accent: #86f7d1;
+      --accent-2: #9fb7ff;
+      --warn: #ffd37a;
+      --shadow: 0 18px 50px rgba(0,0,0,.35);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 20% -10%, rgba(134,247,209,.16), transparent 32rem),
+        radial-gradient(circle at 100% 20%, rgba(159,183,255,.18), transparent 28rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    a { color: var(--accent); }
+    .wrap { width: min(100%, 920px); margin: 0 auto; padding: 18px; }
+
+    header {
+      padding: 34px 18px 16px;
+      text-align: left;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(2rem, 8vw, 4rem);
+      line-height: .98;
+      letter-spacing: -.05em;
+    }
+    .lede {
+      max-width: 64ch;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(21,29,44,.94), rgba(12,16,25,.94));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin: 16px 0;
+      overflow: hidden;
+    }
+    .card h2, .card h3 { margin-top: 0; line-height: 1.15; }
+    .card h2 { font-size: 1.45rem; }
+    .card h3 { color: var(--accent-2); }
+
+    .summary-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr;
+    }
+    .mini {
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    .mini strong { display: block; margin-bottom: 4px; }
+    .muted { color: var(--muted); }
+    .accent { color: var(--accent); }
+    .warn { color: var(--warn); }
+
+    .flow {
+      display: grid;
+      gap: 10px;
+      margin: 16px 0 4px;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+    }
+    .num {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(134,247,209,.14);
+      border: 1px solid rgba(134,247,209,.42);
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #070a0f;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      color: #d8fff1;
+      overflow-x: auto;
+    }
+
+    ul { padding-left: 1.15rem; }
+    li { margin: .35rem 0; }
+
+    figure {
+      margin: 16px 0 0;
+      background: #05070b;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #05070b;
+    }
+    figcaption {
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: .9rem;
+      border-top: 1px solid var(--line);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      font-size: .95rem;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { color: var(--accent); background: rgba(134,247,209,.08); }
+    tr:last-child td { border-bottom: 0; }
+
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: rgba(134,247,209,.08);
+      border-radius: 14px;
+      padding: 14px;
+      margin: 14px 0;
+    }
+    .script {
+      font-size: 1.02rem;
+      background: linear-gradient(180deg, rgba(134,247,209,.10), rgba(159,183,255,.08));
+      border: 1px solid rgba(134,247,209,.35);
+    }
+    footer {
+      color: var(--muted);
+      font-size: .85rem;
+      padding: 24px 18px 48px;
+    }
+
+    @media (min-width: 720px) {
+      .wrap { padding: 28px; }
+      header { padding-top: 52px; }
+      .summary-grid { grid-template-columns: repeat(3, 1fr); }
+      .card { padding: 24px; margin: 22px 0; }
+      .flow { grid-template-columns: repeat(2, 1fr); }
+      .flow .step:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    }
+
+    @media print {
+      body { background: #fff; color: #111; }
+      .card, figure, pre { box-shadow: none; break-inside: avoid; }
+      a { color: #0645ad; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div class="eyebrow">🧬 Family archive pipeline</div>
+      <h1>Family Photo & Genealogy Project</h1>
+      <p class="lede">A simple, step-by-step system for preserving scanned family photos, identifying faces, and connecting those people to the family tree.</p>
+    </header>
+
+    <section class="card">
+      <h2>🎯 The goal</h2>
+      <p>We want to make sure the people in these photos are not lost to time.</p>
+      <div class="summary-grid">
+        <div class="mini"><strong>1. Preserve</strong><span class="muted">Keep original scans safe and unchanged.</span></div>
+        <div class="mini"><strong>2. Identify</strong><span class="muted">Use face recognition to group and name people.</span></div>
+        <div class="mini"><strong>3. Connect</strong><span class="muted">Attach people and photos to the family tree.</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>🧭 Big picture</h2>
+      <pre>Raw Photos → Working Copies → Face Recognition → Named People → Family Tree → Legacy Archive</pre>
+      <div class="callout"><strong>Key idea:</strong> do not try to organize everything perfectly at the start. First, protect the originals. Then identify people. Then build the genealogy structure.</div>
+    </section>
+
+    <section class="card">
+      <h2>📁 Phase 1 — Create a safe folder structure</h2>
+      <p>Start by putting the entire archive in one stable place, ideally on the computer and backed up to an external drive.</p>
+      <pre>FamilyArchive/
+  photos_raw/        original scans — do not edit
+  photos_working/    copies used for tagging and organizing
+  exports/           final curated outputs later
+  notes/             people list, research notes, questions</pre>
+      <ul>
+        <li><strong>Never edit or delete</strong> anything in <code>photos_raw</code>.</li>
+        <li>Do all work in <code>photos_working</code>.</li>
+        <li>Do not rename thousands of files at the beginning.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>🧠 Phase 2 — Use a photo system to identify faces</h2>
+      <p><strong>Recommended tool:</strong> Immich. This is the “photo brain” of the project. It scans photos, detects faces, groups similar faces together, and lets you name people.</p>
+      <figure>
+        <img src="https://docs.immich.app/assets/images/facial-recognition-1-da234a442c5f6641708f8f1a508ba4a6.webp" alt="Immich face recognition people row screenshot" loading="lazy" />
+        <figcaption>Immich groups faces into people, then you assign names.</figcaption>
+      </figure>
+      <figure>
+        <img src="https://docs.immich.app/assets/images/facial-recognition-4-c662499e01e976caa90d4ff962d9cbfb.webp" alt="Immich person actions menu screenshot" loading="lazy" />
+        <figcaption>Useful actions include merging duplicate people, hiding irrelevant faces, and choosing a featured photo.</figcaption>
+      </figure>
+      <h3>What you do in this phase</h3>
+      <ul>
+        <li>Import the working photo copies.</li>
+        <li>Let the system scan and group faces.</li>
+        <li>Name people when you recognize them.</li>
+        <li>Merge duplicate groups when the same person appears twice.</li>
+        <li>Ignore strangers, background faces, or uncertain faces until later.</li>
+      </ul>
+      <div class="callout"><strong>This is the highest-leverage step.</strong> Once faces are named, the archive becomes searchable and much easier to connect to family history.</div>
+    </section>
+
+    <section class="card">
+      <h2>📝 Phase 3 — Keep a simple people list</h2>
+      <p>While identifying faces, keep a plain list of people and clues. This does not need to be perfect.</p>
+      <table>
+        <thead><tr><th>Name</th><th>Notes</th><th>Relationships</th></tr></thead>
+        <tbody>
+          <tr><td>Mary Johnson</td><td>Grandma; appears in several 1950s photos</td><td>Mother of Susan</td></tr>
+          <tr><td>Robert “Bob” Smith</td><td>Possibly Uncle Bob</td><td>Brother of Mary?</td></tr>
+          <tr><td>Unknown Woman A</td><td>Seen in wedding photos</td><td>Ask Aunt Linda</td></tr>
+        </tbody>
+      </table>
+      <p class="muted">A spreadsheet, Word document, notebook, or simple text file is fine. The point is to avoid losing clues.</p>
+    </section>
+
+    <section class="card">
+      <h2>🌳 Phase 4 — Use genealogy software for the family tree</h2>
+      <p><strong>Recommended tool:</strong> Heredis. This is the “family tree brain” of the project. It stores people, relationships, dates, places, sources, and attached media.</p>
+      <figure>
+        <img src="https://help.heredis.com/wp-content/uploads/2019/09/mainscreen_21_mac_en.png" alt="Heredis main interface screenshot on Mac" loading="lazy" />
+        <figcaption>Heredis is a genealogy program for building and browsing family trees.</figcaption>
+      </figure>
+      <figure>
+        <img src="https://help.heredis.com/wp-content/uploads/2017/12/XXL_family_pc_EN-1024x656.png" alt="Heredis XXL family tree view screenshot" loading="lazy" />
+        <figcaption>Use Heredis to connect people, generations, and photos into a structured family tree.</figcaption>
+      </figure>
+      <h3>Why Heredis instead of Ancestris?</h3>
+      <table>
+        <thead><tr><th>Tool</th><th>Best for</th><th>Tradeoff</th></tr></thead>
+        <tbody>
+          <tr><td>Heredis</td><td>Easier family-tree building, friendlier interface, polished reports</td><td>Costs money</td></tr>
+          <tr><td>Ancestris</td><td>Free, open-source, GEDCOM-focused genealogy work</td><td>More technical and less friendly</td></tr>
+        </tbody>
+      </table>
+      <div class="callout"><strong>Recommendation:</strong> use Heredis for the family tree unless the free/open-source requirement is more important than ease of use.</div>
+    </section>
+
+    <section class="card">
+      <h2>🔗 Phase 5 — Link photos to people</h2>
+      <p>Do not try to make one program do everything.</p>
+      <div class="flow">
+        <div class="step"><div class="num">1</div><div><strong>Immich</strong><br><span class="muted">Finds faces, groups people, and lets you search photos visually.</span></div></div>
+        <div class="step"><div class="num">2</div><div><strong>Heredis</strong><br><span class="muted">Stores the family tree, relationships, facts, sources, and selected photos.</span></div></div>
+        <div class="step"><div class="num">3</div><div><strong>People list</strong><br><span class="muted">Captures uncertain names, clues, nicknames, and questions.</span></div></div>
+      </div>
+      <p>When a person is clearly identified, attach their best photos to their person record in Heredis. Keep Immich as the searchable photo archive.</p>
+    </section>
+
+    <section class="card">
+      <h2>💾 External hard drive answer</h2>
+      <p><strong>Yes, the data can live on an external hard drive.</strong></p>
+      <ul>
+        <li>Photos can be stored on the external drive.</li>
+        <li>Genealogy project files can be stored there too.</li>
+        <li>The programs themselves usually install on the computer.</li>
+      </ul>
+      <div class="callout"><strong>Simple translation:</strong> the data is portable; the app is usually installed locally.</div>
+    </section>
+
+    <section class="card">
+      <h2>🔒 Phase 6 — Backup rule</h2>
+      <p class="warn"><strong>If there is no backup, the project is not safe.</strong></p>
+      <ul>
+        <li>Keep one copy on the main computer.</li>
+        <li>Keep one copy on an external hard drive.</li>
+        <li>Ideally keep one more copy in cloud storage or on a second drive.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>🚫 Avoid these traps</h2>
+      <ul>
+        <li>Do not start by manually sorting thousands of photos.</li>
+        <li>Do not rename everything before people are identified.</li>
+        <li>Do not edit the original scans.</li>
+        <li>Do not skip backups.</li>
+        <li>Do not expect genealogy software to do excellent face recognition.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>✅ First one-hour checklist</h2>
+      <div class="flow">
+        <div class="step"><div class="num">1</div><div>Create the <code>FamilyArchive</code> folder structure.</div></div>
+        <div class="step"><div class="num">2</div><div>Copy a small test batch of photos into <code>photos_working</code>.</div></div>
+        <div class="step"><div class="num">3</div><div>Test face grouping on a small set before importing everything.</div></div>
+        <div class="step"><div class="num">4</div><div>Create the people list document.</div></div>
+        <div class="step"><div class="num">5</div><div>Pick Heredis if ease of use matters most.</div></div>
+      </div>
+    </section>
+
+    <footer>
+      Screenshot sources: Immich documentation and public Heredis screenshot galleries. This document is meant as a planning guide, not a guarantee that any tool will perfectly identify old or degraded scanned faces.
+    </footer>
+  </main>
+</body>
+</html>
